@@ -22,14 +22,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || isLoading}
         className={cn(
           `btn-${variant}`,
-          'relative inline-flex items-center justify-center gap-2',
+          'relative inline-flex items-center justify-center gap-2 whitespace-nowrap',
           sizeClasses[size],
           className
         )}
         {...props}
       >
         {isLoading && <Spinner size="sm" className="absolute left-4" />}
-        <span className={cn(isLoading && 'opacity-0')}>{children}</span>
+        <span className={cn('inline-flex items-center justify-center gap-2 whitespace-nowrap', isLoading && 'opacity-0')}>
+          {children}
+        </span>
       </button>
     );
   }

@@ -122,34 +122,34 @@ export function BlacklistTable() {
       <div className="glass-card overflow-hidden">
         <div className="border-b border-border-subtle/60 p-5 sm:p-6">
           <div className="flex flex-col gap-6">
-            <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(620px,0.95fr)] xl:items-start">
+            <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(560px,0.9fr)] xl:items-start">
             <div>
               <p className="section-label mb-2">Bloqueos y reportes</p>
               <h3 className="text-2xl font-bold text-text-primary">IPs bloqueadas recientemente</h3>
               <p className="mt-1 text-sm text-text-secondary">Busca, filtra y descarga los bloqueos activos o cerrados.</p>
             </div>
 
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <div className="rounded-2xl border border-border-subtle/60 bg-surface/60 p-3">
+              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+              <div className="rounded-xl border border-border-subtle/60 bg-surface/60 p-2.5">
                 <p className="text-[11px] uppercase tracking-[0.16em] text-text-muted">Resultados</p>
-                <p className="mt-2 text-2xl font-bold text-text-primary">{filteredEntries.length}</p>
+                <p className="mt-1.5 text-[1.75rem] leading-none font-bold text-text-primary">{filteredEntries.length}</p>
               </div>
-              <div className="rounded-2xl border border-border-subtle/60 bg-surface/60 p-3">
+              <div className="rounded-xl border border-border-subtle/60 bg-surface/60 p-2.5">
                 <p className="text-[11px] uppercase tracking-[0.16em] text-text-muted">Activas</p>
-                <p className="mt-2 text-2xl font-bold text-status-expired">{activeCount}</p>
+                <p className="mt-1.5 text-[1.75rem] leading-none font-bold text-status-expired">{activeCount}</p>
               </div>
-              <div className="rounded-2xl border border-border-subtle/60 bg-surface/60 p-3">
+              <div className="rounded-xl border border-border-subtle/60 bg-surface/60 p-2.5">
                 <p className="text-[11px] uppercase tracking-[0.16em] text-text-muted">Retiradas</p>
-                <p className="mt-2 text-2xl font-bold text-status-active">{removedCount}</p>
+                <p className="mt-1.5 text-[1.75rem] leading-none font-bold text-status-active">{removedCount}</p>
               </div>
-              <div className="rounded-2xl border border-border-subtle/60 bg-surface/60 p-3">
+              <div className="rounded-xl border border-border-subtle/60 bg-surface/60 p-2.5">
                 <p className="text-[11px] uppercase tracking-[0.16em] text-text-muted">Expiradas</p>
-                <p className="mt-2 text-2xl font-bold text-status-pending">{expiredCount}</p>
+                <p className="mt-1.5 text-[1.75rem] leading-none font-bold text-status-pending">{expiredCount}</p>
               </div>
             </div>
             </div>
 
-            <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_280px_420px] xl:items-stretch">
+            <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_260px_500px] xl:items-stretch">
             <div className="rounded-2xl border border-border-subtle/60 bg-surface/45 p-3">
               <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">Búsqueda</p>
               <div className="flex min-h-[58px] items-center gap-3 rounded-xl border border-border-subtle/60 bg-mf-darker/55 px-4">
@@ -177,10 +177,10 @@ export function BlacklistTable() {
                 </select>
               </div>
 
-              <div className="rounded-2xl border border-border-subtle/60 bg-gradient-to-br from-surface/70 to-mf-darker/60 p-3">
+              <div className="rounded-2xl border border-border-subtle/60 bg-gradient-to-br from-surface/70 to-mf-darker/60 p-3.5">
                 <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">Exportar</p>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <Button variant="secondary" size="sm" onClick={handleExportExcel} isLoading={isExportingExcel} className="h-auto min-h-[82px] justify-start rounded-2xl border-emerald-500/20 bg-emerald-500/8 px-4 py-3 text-left hover:border-emerald-400/40 hover:bg-emerald-500/12">
+                  <Button variant="secondary" size="sm" onClick={handleExportExcel} isLoading={isExportingExcel} className="h-auto min-h-[88px] justify-start rounded-2xl border-emerald-500/20 bg-emerald-500/8 px-4 py-3.5 text-left hover:border-emerald-400/40 hover:bg-emerald-500/12">
                     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 ring-1 ring-emerald-400/20">
                       <img src="/icons/file-excel.svg" alt="Excel" className="h-6 w-6 object-contain" />
                     </span>
@@ -190,7 +190,7 @@ export function BlacklistTable() {
                     </span>
                   </Button>
 
-                  <Button variant="secondary" size="sm" onClick={handleExportPdf} isLoading={isExportingPdf} className="h-auto min-h-[82px] justify-start rounded-2xl border-rose-500/20 bg-rose-500/8 px-4 py-3 text-left hover:border-rose-400/40 hover:bg-rose-500/12">
+                  <Button variant="secondary" size="sm" onClick={handleExportPdf} isLoading={isExportingPdf} className="h-auto min-h-[88px] justify-start rounded-2xl border-rose-500/20 bg-rose-500/8 px-4 py-3.5 text-left hover:border-rose-400/40 hover:bg-rose-500/12">
                     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-rose-500/15 ring-1 ring-rose-400/20">
                       <img src="/icons/file-pdf.svg" alt="PDF" className="h-6 w-6 object-contain" />
                     </span>

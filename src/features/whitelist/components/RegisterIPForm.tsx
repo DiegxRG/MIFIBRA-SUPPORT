@@ -75,9 +75,8 @@ export function RegisterIPForm() {
       <form onSubmit={handleSubmit(onRequestSubmit)} className="flex flex-col gap-5">
         <input type="hidden" {...register('exclusionHours', { valueAsNumber: true })} />
 
-        <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_280px]">
-          <div className="space-y-5">
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               <Input
                 label="IP Pública del Cliente"
                 placeholder="190.119.45.172"
@@ -93,21 +92,21 @@ export function RegisterIPForm() {
                 error={errors.ticketId?.message}
                 {...register('ticketId')}
               />
+          </div>
+
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <label className="text-sm font-medium text-text-secondary">Tiempo de exclusión</label>
+                <p className="mt-1 text-xs text-text-muted">Usa un tiempo sugerido o ajusta uno personalizado.</p>
+              </div>
+              <div className="rounded-full border border-border-subtle/60 bg-surface/55 px-3 py-1.5 text-xs text-text-secondary">
+                Hasta 168 horas
+              </div>
             </div>
 
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <label className="text-sm font-medium text-text-secondary">Tiempo de exclusión</label>
-                  <p className="mt-1 text-xs text-text-muted">Usa un tiempo sugerido o ajusta uno personalizado.</p>
-                </div>
-                <div className="rounded-full border border-border-subtle/60 bg-surface/55 px-3 py-1.5 text-xs text-text-secondary">
-                  Hasta 168 horas
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-                {presetOptions.map((option) => {
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+              {presetOptions.map((option) => {
                   const isSelected = selectedHours === option.value && !isCustomDuration;
 
                   return (
@@ -138,91 +137,69 @@ export function RegisterIPForm() {
                   );
                 })}
 
-                <div
-                  className={cn(
-                    'rounded-xl border p-3.5 transition-all duration-200',
-                    isCustomDuration
-                      ? 'border-gs-blue-mid/45 bg-gs-blue-mid/10 shadow-glow-blue/20'
-                      : 'border-border-subtle/70 bg-surface/55'
-                  )}
-                >
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-text-primary">Personalizado</p>
-                      <p className="mt-1 text-[11px] text-text-muted">Tiempo exacto</p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={activateCustomDuration}
-                      className={cn(
-                        'rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]',
-                        isCustomDuration ? 'bg-gs-blue-mid/15 text-gs-blue-light' : 'bg-mf-darker/70 text-text-muted'
-                      )}
-                    >
-                      Horas
-                    </button>
+              <div
+                className={cn(
+                  'rounded-xl border p-3.5 transition-all duration-200',
+                  isCustomDuration
+                    ? 'border-gs-blue-mid/45 bg-gs-blue-mid/10 shadow-glow-blue/20'
+                    : 'border-border-subtle/70 bg-surface/55'
+                )}
+              >
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-text-primary">Personalizado</p>
+                    <p className="mt-1 text-[11px] text-text-muted">Tiempo exacto</p>
                   </div>
-
-                  <div className="flex items-center gap-3 rounded-xl border border-border-subtle/60 bg-mf-darker/55 px-3 py-2.5">
-                    <input
-                      type="number"
-                      min={1}
-                      max={168}
-                      value={isCustomDuration && Number.isFinite(selectedHours) ? selectedHours : ''}
-                      onFocus={activateCustomDuration}
-                      onChange={(event) => {
-                        const value = event.target.value;
-                        setValue('exclusionHours', value === '' ? Number.NaN : Number(value), {
-                          shouldDirty: true,
-                          shouldValidate: true,
-                        });
-                      }}
-                      className="w-full bg-transparent text-lg font-bold text-text-primary outline-none"
-                      placeholder="96"
-                    />
-                    <span className="text-sm text-text-secondary">horas</span>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={activateCustomDuration}
+                    className={cn(
+                      'rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]',
+                      isCustomDuration ? 'bg-gs-blue-mid/15 text-gs-blue-light' : 'bg-mf-darker/70 text-text-muted'
+                    )}
+                  >
+                    Horas
+                  </button>
                 </div>
-              </div>
 
-              {errors.exclusionHours && (
-                <p className="text-xs mt-0.5 text-status-expired">{errors.exclusionHours.message}</p>
-              )}
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-mf-pink/20 bg-gradient-to-br from-mf-pink/10 via-transparent to-gs-blue-mid/10 p-4">
-            <p className="section-label mb-3">Vista rápida</p>
-            <div className="space-y-3.5">
-              <div>
-                <p className="text-sm text-text-secondary">Tiempo seleccionado</p>
-                <p className="mt-1.5 text-2xl font-bold text-text-primary">{Number.isFinite(selectedHours) ? selectedHours : '--'}h</p>
-              </div>
-
-              <div className="rounded-xl border border-border-subtle/60 bg-mf-darker/60 p-3.5 text-sm text-text-secondary">
-                <p className="font-semibold text-text-primary">Qué hace este acceso</p>
-                <p className="mt-1.5 leading-5">Autoriza temporalmente la IP del cliente para que el caso pueda continuar sin bloqueo geográfico.</p>
-              </div>
-
-              <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-1">
-                <div className="rounded-xl border border-border-subtle/60 bg-surface/50 p-3.5">
-                  <p className="text-xs uppercase tracking-[0.18em] text-text-muted">Uso común</p>
-                  <p className="mt-1.5 text-sm font-semibold text-text-primary">24h o 48h</p>
-                </div>
-                <div className="rounded-xl border border-border-subtle/60 bg-surface/50 p-3.5">
-                  <p className="text-xs uppercase tracking-[0.18em] text-text-muted">Límite</p>
-                  <p className="mt-1.5 text-sm font-semibold text-text-primary">Hasta 7 días</p>
+                <div className="flex items-center gap-3 rounded-xl border border-border-subtle/60 bg-mf-darker/55 px-3 py-2.5">
+                  <input
+                    type="number"
+                    min={1}
+                    max={168}
+                    value={isCustomDuration && Number.isFinite(selectedHours) ? selectedHours : ''}
+                    onFocus={activateCustomDuration}
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      setValue('exclusionHours', value === '' ? Number.NaN : Number(value), {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      });
+                    }}
+                    className="w-full bg-transparent text-lg font-bold text-text-primary outline-none"
+                    placeholder="96"
+                  />
+                  <span className="text-sm text-text-secondary">horas</span>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="flex flex-col gap-3 border-t border-border-subtle/50 pt-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-text-secondary">Confirma solo accesos respaldados por ticket y por el tiempo necesario.</p>
-          <Button type="submit" className="w-full sm:w-auto" size="lg">
-            Registrar en Whitelist
-          </Button>
+            {errors.exclusionHours && (
+              <p className="text-xs mt-0.5 text-status-expired">{errors.exclusionHours.message}</p>
+            )}
+
+            <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-text-secondary">Confirma solo accesos respaldados por ticket y por el tiempo necesario.</p>
+              <Button
+                type="submit"
+                className="w-full sm:w-auto sm:shrink-0 rounded-2xl px-7 shadow-glow-orange ring-1 ring-mf-pink/20"
+                size="lg"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                Registrar en Whitelist
+              </Button>
+            </div>
+          </div>
         </div>
       </form>
 

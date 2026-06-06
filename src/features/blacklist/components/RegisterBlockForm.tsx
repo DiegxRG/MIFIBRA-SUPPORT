@@ -80,9 +80,8 @@ export function RegisterBlockForm() {
       <form onSubmit={handleSubmit(onRequestSubmit)} className="flex flex-col gap-5">
         <input type="hidden" {...register('blockHours', { valueAsNumber: true })} />
 
-        <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_280px]">
-          <div className="space-y-5">
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               <Input
                 label="IP a bloquear"
                 placeholder="190.119.45.172"
@@ -98,29 +97,29 @@ export function RegisterBlockForm() {
                 error={errors.ticketId?.message}
                 {...register('ticketId')}
               />
+          </div>
+
+          <Input
+            label="Motivo"
+            placeholder="Ej. acceso fuera de política"
+            helperText="Describe por qué esta IP debe bloquearse"
+            error={errors.reason?.message}
+            {...register('reason')}
+          />
+
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <label className="text-sm font-medium text-text-secondary">Tiempo de bloqueo</label>
+                <p className="mt-1 text-xs text-text-muted">Usa un tiempo sugerido o ajusta uno personalizado.</p>
+              </div>
+              <div className="rounded-full border border-border-subtle/60 bg-surface/55 px-3 py-1.5 text-xs text-text-secondary">
+                Hasta 720 horas
+              </div>
             </div>
 
-            <Input
-              label="Motivo"
-              placeholder="Ej. acceso fuera de política"
-              helperText="Describe por qué esta IP debe bloquearse"
-              error={errors.reason?.message}
-              {...register('reason')}
-            />
-
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <label className="text-sm font-medium text-text-secondary">Tiempo de bloqueo</label>
-                  <p className="mt-1 text-xs text-text-muted">Usa un tiempo sugerido o ajusta uno personalizado.</p>
-                </div>
-                <div className="rounded-full border border-border-subtle/60 bg-surface/55 px-3 py-1.5 text-xs text-text-secondary">
-                  Hasta 720 horas
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-                {presetOptions.map((option) => {
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+              {presetOptions.map((option) => {
                   const isSelected = selectedHours === option.value && !isCustomDuration;
 
                   return (
@@ -151,89 +150,67 @@ export function RegisterBlockForm() {
                   );
                 })}
 
-                <div
-                  className={cn(
-                    'rounded-xl border p-3.5 transition-all duration-200',
-                    isCustomDuration
-                      ? 'border-gs-blue-mid/45 bg-gs-blue-mid/10 shadow-glow-blue/20'
-                      : 'border-border-subtle/70 bg-surface/55'
-                  )}
-                >
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-text-primary">Personalizado</p>
-                      <p className="mt-1 text-[11px] text-text-muted">Tiempo exacto</p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={activateCustomDuration}
-                      className={cn(
-                        'rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]',
-                        isCustomDuration ? 'bg-gs-blue-mid/15 text-gs-blue-light' : 'bg-mf-darker/70 text-text-muted'
-                      )}
-                    >
-                      Horas
-                    </button>
+              <div
+                className={cn(
+                  'rounded-xl border p-3.5 transition-all duration-200',
+                  isCustomDuration
+                    ? 'border-gs-blue-mid/45 bg-gs-blue-mid/10 shadow-glow-blue/20'
+                    : 'border-border-subtle/70 bg-surface/55'
+                )}
+              >
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-text-primary">Personalizado</p>
+                    <p className="mt-1 text-[11px] text-text-muted">Tiempo exacto</p>
                   </div>
-
-                  <div className="flex items-center gap-3 rounded-xl border border-border-subtle/60 bg-mf-darker/55 px-3 py-2.5">
-                    <input
-                      type="number"
-                      min={1}
-                      max={720}
-                      value={isCustomDuration && Number.isFinite(selectedHours) ? selectedHours : ''}
-                      onFocus={activateCustomDuration}
-                      onChange={(event) => {
-                        const value = event.target.value;
-                        setValue('blockHours', value === '' ? Number.NaN : Number(value), {
-                          shouldDirty: true,
-                          shouldValidate: true,
-                        });
-                      }}
-                      className="w-full bg-transparent text-lg font-bold text-text-primary outline-none"
-                      placeholder="240"
-                    />
-                    <span className="text-sm text-text-secondary">horas</span>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={activateCustomDuration}
+                    className={cn(
+                      'rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]',
+                      isCustomDuration ? 'bg-gs-blue-mid/15 text-gs-blue-light' : 'bg-mf-darker/70 text-text-muted'
+                    )}
+                  >
+                    Horas
+                  </button>
                 </div>
-              </div>
 
-              {errors.blockHours && <p className="text-xs mt-0.5 text-status-expired">{errors.blockHours.message}</p>}
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-status-expired/20 bg-gradient-to-br from-status-expired/10 via-transparent to-gs-blue-mid/10 p-4">
-            <p className="section-label mb-3">Vista rápida</p>
-            <div className="space-y-3.5">
-              <div>
-                <p className="text-sm text-text-secondary">Tiempo seleccionado</p>
-                <p className="mt-1.5 text-2xl font-bold text-text-primary">{Number.isFinite(selectedHours) ? selectedHours : '--'}h</p>
-              </div>
-
-              <div className="rounded-xl border border-border-subtle/60 bg-mf-darker/60 p-3.5 text-sm text-text-secondary">
-                <p className="font-semibold text-text-primary">Qué hace este bloqueo</p>
-                <p className="mt-1.5 leading-5">Envía la IP a blacklist para impedir el acceso temporalmente hasta que venza o se retire.</p>
-              </div>
-
-              <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-1">
-                <div className="rounded-xl border border-border-subtle/60 bg-surface/50 p-3.5">
-                  <p className="text-xs uppercase tracking-[0.18em] text-text-muted">Uso común</p>
-                  <p className="mt-1.5 text-sm font-semibold text-text-primary">24h o 72h</p>
-                </div>
-                <div className="rounded-xl border border-border-subtle/60 bg-surface/50 p-3.5">
-                  <p className="text-xs uppercase tracking-[0.18em] text-text-muted">Límite</p>
-                  <p className="mt-1.5 text-sm font-semibold text-text-primary">Hasta 30 días</p>
+                <div className="flex items-center gap-3 rounded-xl border border-border-subtle/60 bg-mf-darker/55 px-3 py-2.5">
+                  <input
+                    type="number"
+                    min={1}
+                    max={720}
+                    value={isCustomDuration && Number.isFinite(selectedHours) ? selectedHours : ''}
+                    onFocus={activateCustomDuration}
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      setValue('blockHours', value === '' ? Number.NaN : Number(value), {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      });
+                    }}
+                    className="w-full bg-transparent text-lg font-bold text-text-primary outline-none"
+                    placeholder="240"
+                  />
+                  <span className="text-sm text-text-secondary">horas</span>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="flex flex-col gap-3 border-t border-border-subtle/50 pt-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-text-secondary">Aplica bloqueos solo cuando el caso y el motivo estén claramente documentados.</p>
-          <Button type="submit" className="w-full sm:w-auto" size="lg">
-            Enviar a Blacklist
-          </Button>
+            {errors.blockHours && <p className="text-xs mt-0.5 text-status-expired">{errors.blockHours.message}</p>}
+
+            <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-text-secondary">Aplica bloqueos solo cuando el caso y el motivo estén claramente documentados.</p>
+              <Button
+                type="submit"
+                className="w-full sm:w-auto sm:shrink-0 rounded-2xl border-0 bg-gradient-to-r from-status-expired to-rose-500 px-7 text-white shadow-[0_0_24px_rgba(239,68,68,0.35)]"
+                size="lg"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
+                Enviar a Blacklist
+              </Button>
+            </div>
+          </div>
         </div>
       </form>
 
