@@ -78,7 +78,7 @@ export function LoginPage() {
           </div>
 
           <div className="order-1 w-full max-w-md justify-self-center animate-slide-up lg:order-2 lg:max-w-none">
-            <div className="glass-card p-7 sm:p-8 lg:p-10">
+            <div className="glass-card p-7 sm:p-8 lg:p-9">
               <div className="mb-8 flex items-center justify-between gap-4">
                 <div>
                   <p className="section-label mb-2">Ingreso seguro</p>
@@ -89,7 +89,7 @@ export function LoginPage() {
                 </div>
               </div>
 
-              <p className="mb-8 text-sm leading-6 text-text-secondary sm:text-base">
+              <p className="mb-7 text-sm leading-6 text-text-secondary sm:text-base">
                 Ingresa con tu cuenta MiFibra para continuar.
               </p>
 

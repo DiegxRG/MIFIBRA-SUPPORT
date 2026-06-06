@@ -1,73 +1,132 @@
-# React + TypeScript + Vite
+# MiFibra Support
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Panel interno de `MiFibra` para gestionar accesos temporales, bloqueos de IP y seguimiento operativo por zona.
 
-Currently, two official plugins are available:
+## Resumen
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+La aplicación permite:
 
-## React Compiler
+- iniciar sesión con usuarios internos mock
+- registrar IPs en `Whitelist`
+- enviar IPs a `Blacklist`
+- revisar historial con filtros, paginación y exportación
+- visualizar actividad geográfica en el dashboard
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tecnologías
 
-## Expanding the ESLint configuration
+- `React`
+- `TypeScript`
+- `Vite`
+- `Tailwind CSS`
+- `Zustand`
+- `MSW` para datos mock
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Instalación
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. Instala dependencias:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Levanta el proyecto en desarrollo:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+3. Abre la app en tu navegador:
+
+```text
+http://localhost:3000
+```
+
+## Credenciales de prueba
+
+Puedes ingresar con cualquiera de estos usuarios mock:
+
+### Usuario soporte
+
+- Correo: `soporte@mifibra.pe`
+- Contraseña: `password123`
+
+### Usuario supervisor
+
+- Correo: `admin@mifibra.pe`
+- Contraseña: `password123`
+
+## Scripts disponibles
+
+```bash
+npm run dev
+```
+
+Inicia el entorno de desarrollo.
+
+```bash
+npm run build
+```
+
+Genera la build de producción.
+
+```bash
+npm run preview
+```
+
+Sirve la build generada localmente.
+
+```bash
+npm run lint
+```
+
+Ejecuta validaciones de código.
+
+## Funcionamiento breve
+
+### Login
+
+Permite el acceso al panel con cuentas internas `@mifibra.pe`.
+
+### Dashboard
+
+Muestra:
+
+- resumen operativo
+- métricas clave
+- mapa de actividad por zona
+- estado general del sistema
+
+### Whitelist
+
+Permite autorizar IPs por un tiempo definido o personalizado.
+
+### Blacklist
+
+Permite bloquear IPs temporalmente con motivo y ticket asociado.
+
+### Historial y reportes
+
+En `Whitelist` y `Blacklist` puedes:
+
+- buscar por IP, ticket, agente o motivo
+- filtrar por estado
+- paginar resultados
+- exportar a `Excel` y `PDF`
+
+## Datos mock
+
+Actualmente la app funciona con datos mock mediante `MSW`, por lo que puedes probar todo el flujo sin backend real.
+
+## Estado del proyecto
+
+Incluye actualmente:
+
+- login interno
+- dashboard con mapa de Perú
+- gestión de whitelist
+- gestión de blacklist
+- exportación de reportes
+
+## Créditos
+
+Desarrollado por `TxDxSecure`.

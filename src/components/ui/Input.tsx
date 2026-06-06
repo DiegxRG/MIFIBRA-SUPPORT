@@ -6,10 +6,11 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   error?: string;
   helperText?: string;
   icon?: React.ReactNode;
+  suffix?: React.ReactNode;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, helperText, icon, id, ...props }, ref) => {
+  ({ className, label, error, helperText, icon, suffix, id, ...props }, ref) => {
     const inputId = id || React.useId();
 
     return (
@@ -25,12 +26,18 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               {icon}
             </div>
           )}
+          {suffix && (
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted">
+              {suffix}
+            </div>
+          )}
           <input
             id={inputId}
             ref={ref}
             className={cn(
               'input-base',
               icon && 'pl-10',
+              suffix && 'pr-12',
               error && 'border-status-expired focus:border-status-expired focus:ring-status-expired/20',
               className
             )}
