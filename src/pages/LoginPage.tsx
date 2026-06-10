@@ -4,9 +4,13 @@ import { LoginForm } from '../features/auth/components/LoginForm';
 import logoMiFibra from '../assets/images/logo-mifibra.png';
 
 export function LoginPage() {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, mustChangePassword } = useAuthStore();
 
   if (isAuthenticated) {
+    if (mustChangePassword) {
+      return <Navigate to="/change-password" replace />;
+    }
+
     return <Navigate to="/dashboard" replace />;
   }
 

@@ -16,9 +16,9 @@ export function Navbar() {
     { to: '/blacklist', label: 'Blacklist IP' },
   ];
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setIsMenuOpen(false);
-    logout();
+    await logout();
     navigate('/login');
   };
 

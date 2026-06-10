@@ -40,8 +40,16 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await login(data);
-      toast.success('Bienvenido', { description: 'Tu panel ya está listo.' });
+      const session = await login(data);
+
+      if (session.mustChangePassword) {
+        toast.warning('Cambio de contraseña requerido', {
+          description: 'Tu cuenta requiere actualizar la contraseña antes de continuar con normalidad.',
+        });
+      } else {
+        toast.success('Bienvenido', { description: 'Tu panel ya está listo.' });
+      }
+
       navigate('/dashboard');
     } catch (err) {
       // Error is handled by hook and displayed via UI

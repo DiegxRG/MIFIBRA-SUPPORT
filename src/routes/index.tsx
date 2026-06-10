@@ -6,6 +6,7 @@ import { DashboardPage } from '../pages/DashboardPage';
 import { WhitelistPage } from '../pages/WhitelistPage';
 import { RouteErrorPage } from '../pages/RouteErrorPage';
 import { BlacklistPage } from '../pages/BlacklistPage';
+import { ChangePasswordPage } from '../pages/ChangePasswordPage';
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute />,
     errorElement: <RouteErrorPage />,
     children: [
+      {
+        path: '/change-password',
+        element: <ChangePasswordPage />,
+      },
       {
         element: <AppLayout />,
         errorElement: <RouteErrorPage />,

@@ -82,7 +82,31 @@ export const loginSchema = z.object({
     .min(8, 'La contraseña debe tener al menos 8 caracteres'),
 });
 
+export const changePasswordSchema = z
+  .object({
+    current_password: z
+      .string()
+      .min(1, 'La contraseña actual es obligatoria')
+      .min(8, 'La contraseña actual debe tener al menos 8 caracteres'),
+    new_password: z
+      .string()
+      .min(8, 'La nueva contraseña debe tener al menos 8 caracteres')
+      .max(128, 'La nueva contraseña es demasiado larga'),
+    confirm_password: z
+      .string()
+      .min(1, 'Confirma la nueva contraseña'),
+  })
+  .refine((data) => data.current_password !== data.new_password, {
+    message: 'La nueva contraseña debe ser distinta a la actual',
+    path: ['new_password'],
+  })
+  .refine((data) => data.new_password === data.confirm_password, {
+    message: 'Las contraseñas no coinciden',
+    path: ['confirm_password'],
+  });
+
 export type LoginFormData = z.infer<typeof loginSchema>;
+export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
 export type RegisterIPFormInput = z.input<typeof registerIPSchema>;
 export type RegisterIPFormData = z.infer<typeof registerIPSchema>;
 export type RegisterBlacklistFormInput = z.input<typeof registerBlacklistSchema>;
