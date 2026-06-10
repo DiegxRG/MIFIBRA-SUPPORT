@@ -7,8 +7,8 @@ interface EmptyStateProps {
 }
 
 export default function EmptyState({
-  title = 'No data found',
-  description = 'There are no records to display.',
+  title = 'No se encontraron datos',
+  description = 'No hay registros para mostrar.',
   icon,
 }: EmptyStateProps) {
   return (

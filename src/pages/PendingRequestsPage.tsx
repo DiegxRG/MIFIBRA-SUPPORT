@@ -21,7 +21,7 @@ export default function PendingRequestsPage() {
       const data = await listRequests({ status: 'PENDING' });
       setRequests(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to load pending requests');
+      setError(err instanceof Error ? err.message : 'No se pudieron cargar las solicitudes pendientes');
     } finally {
       setLoading(false);
     }
@@ -37,8 +37,8 @@ export default function PendingRequestsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-text-primary">Pending Requests</h1>
-        <p className="text-sm text-text-muted mt-1">Requests awaiting review ({requests.length})</p>
+          <h1 className="text-2xl font-bold text-text-primary">Solicitudes pendientes</h1>
+          <p className="text-sm text-text-muted mt-1">Solicitudes en espera de revision ({requests.length})</p>
       </div>
 
       {loading ? (
@@ -47,8 +47,8 @@ export default function PendingRequestsPage() {
         <ErrorState message={error} onRetry={fetchPending} />
       ) : requests.length === 0 ? (
         <EmptyState
-          title="No pending requests"
-          description="All requests have been reviewed."
+          title="No hay solicitudes pendientes"
+          description="Todas las solicitudes ya fueron revisadas."
           icon={<Clock size={48} strokeWidth={1} />}
         />
       ) : (

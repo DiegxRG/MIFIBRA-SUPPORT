@@ -10,6 +10,14 @@ import { useNavigate } from 'react-router-dom';
 
 const statuses: AccessRequestStatus[] = ['PENDING', 'APPROVED', 'REJECTED', 'EXPIRED', 'CANCELLED'];
 
+const statusLabels: Record<AccessRequestStatus, string> = {
+  PENDING: 'Pendientes',
+  APPROVED: 'Aprobadas',
+  REJECTED: 'Rechazadas',
+  EXPIRED: 'Expiradas',
+  CANCELLED: 'Canceladas',
+};
+
 export default function AllRequestsPage() {
   const navigate = useNavigate();
   const [requests, setRequests] = useState<AccessRequestRead[]>([]);
@@ -25,7 +33,7 @@ export default function AllRequestsPage() {
       const data = await listRequests(params);
       setRequests(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to load requests');
+      setError(err instanceof Error ? err.message : 'No se pudieron cargar las solicitudes');
     } finally {
       setLoading(false);
     }
@@ -39,8 +47,8 @@ export default function AllRequestsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-text-primary">All Requests</h1>
-        <p className="text-sm text-text-muted mt-1">View and filter all access requests</p>
+          <h1 className="text-2xl font-bold text-text-primary">Todas las solicitudes</h1>
+          <p className="text-sm text-text-muted mt-1">Consulta y filtra todas las solicitudes de acceso</p>
       </div>
 
       {/* Filters */}
@@ -48,7 +56,7 @@ export default function AllRequestsPage() {
         <div className="relative flex-1 max-w-xs">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
           <input
-            placeholder="Search by IP..."
+            placeholder="Buscar por IP..."
             className="input-base !pl-9"
           />
         </div>
@@ -59,9 +67,9 @@ export default function AllRequestsPage() {
             onChange={(e) => setStatusFilter(e.target.value as AccessRequestStatus | '')}
             className="input-base !pl-9 !pr-8 !w-auto"
           >
-            <option value="">All Statuses</option>
+            <option value="">Todos los estados</option>
             {statuses.map((s) => (
-              <option key={s} value={s}>{s}</option>
+              <option key={s} value={s}>{statusLabels[s]}</option>
             ))}
           </select>
         </div>
@@ -72,7 +80,7 @@ export default function AllRequestsPage() {
       ) : error ? (
         <ErrorState message={error} onRetry={fetchRequests} />
       ) : requests.length === 0 ? (
-        <EmptyState title="No requests found" description="Try changing the filter." />
+        <EmptyState title="No se encontraron solicitudes" description="Intenta cambiar el filtro." />
       ) : (
         <RequestsTable
           requests={requests}

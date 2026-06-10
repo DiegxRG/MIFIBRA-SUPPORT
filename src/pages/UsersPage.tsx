@@ -24,7 +24,7 @@ export default function UsersPage() {
       const data = await listUsers();
       setUsers(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to load users');
+      setError(err instanceof Error ? err.message : 'No se pudieron cargar los usuarios');
     } finally {
       setLoading(false);
     }
@@ -36,7 +36,7 @@ export default function UsersPage() {
   }, [fetchUsers]);
 
   const handleUserCreated = (result: UserCreateResponse) => {
-    toast.success(`User created: ${result.email}`);
+    toast.success(`Usuario creado: ${result.email}`);
     setShowCreateModal(false);
     fetchUsers();
   };
@@ -44,23 +44,23 @@ export default function UsersPage() {
   const handleResetPassword = async (userId: number) => {
     try {
       const result = await resetUserPassword(userId);
-      toast.success(`Password reset. Temp password: ${result.temporary_password}`, { duration: 10_000 });
+      toast.success(`Contrasena restablecida. Clave temporal: ${result.temporary_password}`, { duration: 10_000 });
     } catch {
-      toast.error('Failed to reset password');
+      toast.error('No se pudo restablecer la contrasena');
     }
   };
 
   const handleDeleteUser = async (user: UserRead) => {
-    if (!window.confirm(`Delete user ${user.email}?`)) return;
+    if (!window.confirm(`Deseas eliminar al usuario ${user.email}?`)) return;
     try {
       await deleteUser(user.id);
-      toast.success(`${user.full_name} deleted`);
+      toast.success(`${user.full_name} eliminado`);
       fetchUsers();
     } catch (err: unknown) {
       const msg =
         err && typeof err === 'object' && 'response' in err
           ? String((err as { response: { data: { detail: string } } }).response?.data?.detail ?? '')
-          : 'Failed to delete user';
+          : 'No se pudo eliminar el usuario';
       toast.error(msg);
     }
   };
@@ -69,12 +69,12 @@ export default function UsersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-text-primary">Users</h1>
-          <p className="text-sm text-text-muted mt-1">Manage system users</p>
+          <h1 className="text-2xl font-bold text-text-primary">Usuarios</h1>
+          <p className="text-sm text-text-muted mt-1">Gestiona los usuarios del sistema</p>
         </div>
         <button onClick={() => setShowCreateModal(true)} className="btn-primary flex items-center gap-2">
           <Plus size={18} />
-          Create User
+          Crear usuario
         </button>
       </div>
 
@@ -83,7 +83,7 @@ export default function UsersPage() {
       ) : error ? (
         <ErrorState message={error} onRetry={fetchUsers} />
       ) : users.length === 0 ? (
-        <EmptyState title="No users" description="Create the first user to get started." />
+        <EmptyState title="No hay usuarios" description="Crea el primer usuario para comenzar." />
       ) : (
         <UsersTable
           users={users}

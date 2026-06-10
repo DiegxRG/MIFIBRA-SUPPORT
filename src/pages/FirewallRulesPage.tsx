@@ -23,7 +23,7 @@ export default function FirewallRulesPage() {
       const data = await listFirewallRules();
       setRules(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to load rules');
+      setError(err instanceof Error ? err.message : 'No se pudieron cargar las reglas');
     } finally {
       setLoading(false);
     }
@@ -38,10 +38,10 @@ export default function FirewallRulesPage() {
     setSyncing(true);
     try {
       const result = await syncFirewallRules();
-      toast.success(`EDL refreshed: ${JSON.stringify(result)}`);
+      toast.success(`EDL actualizada: ${JSON.stringify(result)}`);
       fetchRules();
     } catch {
-      toast.error('Failed to refresh EDL');
+      toast.error('No se pudo actualizar la EDL');
     } finally {
       setSyncing(false);
     }
@@ -56,8 +56,8 @@ export default function FirewallRulesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-text-primary">Firewall Rules</h1>
-          <p className="text-sm text-text-muted mt-1">EDL entries active on Palo Alto firewall</p>
+          <h1 className="text-2xl font-bold text-text-primary">Reglas de firewall</h1>
+          <p className="text-sm text-text-muted mt-1">Entradas EDL activas en el firewall Palo Alto</p>
         </div>
         <button
           onClick={handleRefreshEDL}
@@ -65,7 +65,7 @@ export default function FirewallRulesPage() {
           className="btn-secondary flex items-center gap-2 text-sm"
         >
           {syncing ? <Loader2 className="animate-spin" size={16} /> : <RefreshCw size={16} />}
-          {syncing ? 'Refreshing...' : 'Refresh EDL Status'}
+          {syncing ? 'Actualizando...' : 'Actualizar estado EDL'}
         </button>
       </div>
 
@@ -73,15 +73,15 @@ export default function FirewallRulesPage() {
       <div className="grid grid-cols-3 gap-4">
         <div className="stat-card">
           <p className="text-2xl font-bold text-text-primary">{rules.length}</p>
-          <p className="text-xs text-text-muted">Total Rules</p>
+          <p className="text-xs text-text-muted">Total de reglas</p>
         </div>
         <div className="stat-card">
           <p className="text-2xl font-bold text-status-active">{whitelistCount}</p>
-          <p className="text-xs text-text-muted">Active Whitelist</p>
+          <p className="text-xs text-text-muted">Lista blanca activa</p>
         </div>
         <div className="stat-card">
           <p className="text-2xl font-bold text-status-expired">{blacklistCount}</p>
-          <p className="text-xs text-text-muted">Active Blacklist</p>
+          <p className="text-xs text-text-muted">Lista negra activa</p>
         </div>
       </div>
 
@@ -89,7 +89,7 @@ export default function FirewallRulesPage() {
       <div className="glass-card p-5">
         <h2 className="text-sm font-semibold text-text-primary mb-3 flex items-center gap-2">
           <Link2 size={16} className="text-gs-orange" />
-          External Dynamic Lists
+          Listas dinamicas externas
         </h2>
         <EdlLinks />
       </div>
@@ -100,24 +100,24 @@ export default function FirewallRulesPage() {
         <ErrorState message={error} onRetry={fetchRules} />
       ) : rules.length === 0 ? (
         <EmptyState
-          title="No firewall rules"
-          description="Rules are created automatically when requests are approved."
+          title="No hay reglas de firewall"
+          description="Las reglas se crean automaticamente cuando se aprueban solicitudes."
         />
       ) : (
         <div className="space-y-6">
           <div className="glass-card p-5">
-            <h2 className="text-sm font-semibold text-text-primary mb-4">Active Blacklist</h2>
+            <h2 className="text-sm font-semibold text-text-primary mb-4">Lista negra activa</h2>
             {blacklistRules.length === 0 ? (
-              <p className="text-sm text-text-muted">No blacklist rules.</p>
+              <p className="text-sm text-text-muted">No hay reglas en la lista negra.</p>
             ) : (
               <BlacklistRulesTable rules={blacklistRules} />
             )}
           </div>
 
           <div className="glass-card p-5">
-            <h2 className="text-sm font-semibold text-text-primary mb-4">Whitelist</h2>
+            <h2 className="text-sm font-semibold text-text-primary mb-4">Lista blanca</h2>
             {whitelistRules.length === 0 ? (
-              <p className="text-sm text-text-muted">No whitelist rules.</p>
+              <p className="text-sm text-text-muted">No hay reglas en la lista blanca.</p>
             ) : (
               <WhitelistRulesTable rules={whitelistRules} onChanged={fetchRules} />
             )}

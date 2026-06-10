@@ -4,13 +4,13 @@ import { API_BASE_URL } from '@/lib/axios';
 const edlLinks = [
   {
     url: '/edl/whitelist.txt',
-    label: 'Whitelist EDL',
-    description: 'IPs with active approved access',
+    label: 'EDL de lista blanca',
+    description: 'IPs con acceso aprobado y activo',
   },
   {
     url: '/edl/blacklist.txt',
-    label: 'Blacklist EDL',
-    description: 'Blocked IPs',
+    label: 'EDL de lista negra',
+    description: 'IPs bloqueadas',
   },
 ];
 
@@ -42,18 +42,18 @@ export default function EdlLinks() {
               target="_blank"
               rel="noreferrer"
               className="btn-ghost !text-xs flex items-center gap-1.5"
-              title="Open TXT"
+              title="Abrir TXT"
             >
               <ExternalLink size={14} />
-              Open
+              Abrir
             </a>
             <button
               onClick={() => handleCopy(link.url)}
               className="btn-ghost !text-xs flex items-center gap-1.5"
-              title="Copy URL"
+              title="Copiar URL"
             >
               <Copy size={14} />
-              Copy URL
+              Copiar URL
             </button>
           </div>
         </div>

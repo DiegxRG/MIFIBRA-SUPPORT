@@ -10,57 +10,57 @@ const columns: TableColumn<FirewallRuleListItem>[] = [
   },
   {
     key: 'list_type',
-    header: 'List Type',
+    header: 'Tipo de lista',
     render: (row) => (
       <span
         className={`text-xs font-semibold uppercase ${row.list_type === 'WHITELIST' ? 'text-status-active' : 'text-status-expired'}`}
       >
-        {row.list_type}
+        {row.list_type === 'WHITELIST' ? 'Lista blanca' : 'Lista negra'}
       </span>
     ),
   },
   {
     key: 'source_type',
-    header: 'Source Type',
+    header: 'Tipo de origen',
     render: (row) => {
       const labels: Record<string, string> = {
         MANUAL: 'Manual',
-        REQUEST_APPROVAL: 'Request Approval',
-        IP_INTELLIGENCE: 'IP Intelligence',
-        REJECTION: 'Rejection',
-        EXTERNAL_BLACKLIST: 'External Blacklist',
+        REQUEST_APPROVAL: 'Aprobacion de solicitud',
+        IP_INTELLIGENCE: 'Inteligencia de IP',
+        REJECTION: 'Rechazo',
+        EXTERNAL_BLACKLIST: 'Lista negra externa',
       };
       return <span className="text-xs text-text-muted">{labels[row.source_type] ?? row.source_type}</span>;
     },
   },
   {
     key: 'source_name',
-    header: 'Source Name',
+    header: 'Nombre de origen',
     render: (row) => <span className="text-xs text-text-secondary">{row.source_name ?? '—'}</span>,
   },
   {
     key: 'reason',
-    header: 'Reason',
+    header: 'Motivo',
     render: (row) => <span className="text-xs text-text-secondary">{row.reason ?? '—'}</span>,
   },
   {
     key: 'is_active',
-    header: 'Status',
+    header: 'Estado',
     render: (row) => (
       <span className={row.is_active ? 'badge-active' : 'badge-expired'}>
-        {row.is_active ? 'Active' : 'Disabled'}
+        {row.is_active ? 'Activa' : 'Deshabilitada'}
       </span>
     ),
   },
   {
     key: 'created_at',
-    header: 'Created',
+    header: 'Creada',
     render: (row) =>
       new Intl.DateTimeFormat('es-PE', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(row.created_at)),
   },
   {
     key: 'expires_at',
-    header: 'Expires',
+    header: 'Expira',
     render: (row) =>
       row.expires_at
         ? new Intl.DateTimeFormat('es-PE', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(row.expires_at))

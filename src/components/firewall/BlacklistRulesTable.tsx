@@ -11,28 +11,28 @@ const columns: TableColumn<FirewallRuleListItem>[] = [
   },
   {
     key: 'source_type',
-    header: 'Source Type',
+    header: 'Tipo de origen',
     render: (row) => <span className="text-xs text-text-muted">{row.source_type}</span>,
   },
   {
     key: 'source_name',
-    header: 'Source Name',
+    header: 'Nombre de origen',
     render: (row) => <span className="text-xs text-text-secondary">{row.source_name ?? '—'}</span>,
   },
   {
     key: 'reason',
-    header: 'Reason',
+    header: 'Motivo',
     className: 'min-w-[320px] max-w-[420px] align-top',
     render: (row) => <FirewallReasonCell reason={row.reason} />,
   },
   {
     key: 'is_active',
-    header: 'Status',
-    render: (row) => <span className={row.is_active ? 'badge-active' : 'badge-expired'}>{row.is_active ? 'Active' : 'Disabled'}</span>,
+    header: 'Estado',
+    render: (row) => <span className={row.is_active ? 'badge-active' : 'badge-expired'}>{row.is_active ? 'Activa' : 'Deshabilitada'}</span>,
   },
   {
     key: 'created_at',
-    header: 'Created At',
+    header: 'Creada el',
     render: (row) => new Intl.DateTimeFormat('es-PE', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(row.created_at)),
   },
 ];

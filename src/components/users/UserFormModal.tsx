@@ -8,16 +8,16 @@ import type { UserCreateResponse, UserRead } from '@/types/api';
 import { toast } from 'sonner';
 
 const createSchema = z.object({
-  full_name: z.string().min(3, 'Name must be at least 3 characters'),
-  email: z.string().email('Enter a valid email'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  full_name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres'),
+  email: z.string().email('Ingresa un correo valido'),
+  password: z.string().min(8, 'La contrasena debe tener al menos 8 caracteres'),
   role: z.enum(['USER', 'ADMIN']).default('USER'),
   is_active: z.boolean().default(true),
 });
 
 const editSchema = z.object({
-  full_name: z.string().min(3, 'Name must be at least 3 characters'),
-  email: z.string().email('Enter a valid email'),
+  full_name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres'),
+  email: z.string().email('Ingresa un correo valido'),
   role: z.enum(['USER', 'ADMIN']).default('USER'),
   is_active: z.boolean().default(true),
 });
@@ -62,7 +62,7 @@ export default function UserFormModal({ onClose, onCreated, onUpdated, user }: P
           role: data.role,
           is_active: data.is_active,
         });
-        toast.success('User updated');
+        toast.success('Usuario actualizado');
         onUpdated?.();
       } else {
         const result = await createUser(data);
@@ -72,7 +72,7 @@ export default function UserFormModal({ onClose, onCreated, onUpdated, user }: P
       const msg =
         err && typeof err === 'object' && 'response' in err
           ? String((err as { response: { data: { detail: string } } }).response?.data?.detail ?? '')
-          : `Failed to ${isEdit ? 'update' : 'create'} user`;
+          : `No se pudo ${isEdit ? 'actualizar' : 'crear'} el usuario`;
       toast.error(msg);
     } finally {
       setLoading(false);
@@ -85,13 +85,13 @@ export default function UserFormModal({ onClose, onCreated, onUpdated, user }: P
         <button onClick={onClose} className="absolute top-4 right-4 text-text-muted hover:text-text-primary">
           <X size={20} />
         </button>
-        <h2 className="text-lg font-semibold text-text-primary mb-5">{isEdit ? 'Edit User' : 'Create User'}</h2>
+        <h2 className="text-lg font-semibold text-text-primary mb-5">{isEdit ? 'Editar usuario' : 'Crear usuario'}</h2>
 
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-text-primary mb-1">Full Name *</label>
-            <input {...register('full_name')} placeholder="John Doe" className="input-base" />
+            <label className="block text-sm font-medium text-text-primary mb-1">Nombre completo *</label>
+            <input {...register('full_name')} placeholder="Juan Perez" className="input-base" />
             {errors.full_name && <p className="mt-1 text-xs text-status-expired">{errors.full_name.message}</p>}
           </div>
 
@@ -103,30 +103,30 @@ export default function UserFormModal({ onClose, onCreated, onUpdated, user }: P
 
           {!isEdit && (
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-1">Password *</label>
-              <input {...register('password')} type="password" placeholder="Minimum 8 characters" className="input-base" />
+              <label className="block text-sm font-medium text-text-primary mb-1">Contrasena *</label>
+              <input {...register('password')} type="password" placeholder="Minimo 8 caracteres" className="input-base" />
               {errors.password && <p className="mt-1 text-xs text-status-expired">{errors.password.message}</p>}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-text-primary mb-1">Role *</label>
+            <label className="block text-sm font-medium text-text-primary mb-1">Rol *</label>
             <select {...register('role')} className="input-base">
-              <option value="USER">USER (Call Center)</option>
-              <option value="ADMIN">ADMIN (NOC / Operación)</option>
+              <option value="USER">Usuario (Call Center)</option>
+              <option value="ADMIN">Administrador (NOC / Operacion)</option>
             </select>
           </div>
 
           {isEdit && (
             <label className="flex items-center gap-2 text-sm text-text-primary">
               <input type="checkbox" {...register('is_active')} className="accent-gs-orange" />
-              Active user
+              Usuario activo
             </label>
           )}
 
           <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2">
             {loading && <Loader2 className="animate-spin" size={18} />}
-            {loading ? (isEdit ? 'Saving...' : 'Creating...') : (isEdit ? 'Save Changes' : 'Create User')}
+            {loading ? (isEdit ? 'Guardando...' : 'Creando...') : (isEdit ? 'Guardar cambios' : 'Crear usuario')}
           </button>
         </form>
       </div>

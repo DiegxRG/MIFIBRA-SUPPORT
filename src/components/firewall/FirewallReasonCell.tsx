@@ -14,7 +14,7 @@ export default function FirewallReasonCell({ reason }: { reason: string | null }
         <span className="text-xs text-text-secondary whitespace-normal break-words min-w-0">{short}</span>
         {reason.length > 80 && (
           <button onClick={() => setOpen(true)} className="btn-ghost !px-2 !py-0.5 text-[11px] shrink-0">
-            View
+            Ver
           </button>
         )}
       </div>
@@ -24,7 +24,7 @@ export default function FirewallReasonCell({ reason }: { reason: string | null }
             <button onClick={() => setOpen(false)} className="absolute top-4 right-4 text-text-muted hover:text-text-primary">
               <X size={18} />
             </button>
-            <h2 className="text-lg font-semibold text-text-primary mb-4">Rule Reason</h2>
+            <h2 className="text-lg font-semibold text-text-primary mb-4">Motivo de la regla</h2>
             <div className="rounded-xl bg-surface-light border border-border-subtle p-4 text-sm text-text-secondary whitespace-pre-wrap break-words max-h-[60vh] overflow-auto">
               {reason}
             </div>

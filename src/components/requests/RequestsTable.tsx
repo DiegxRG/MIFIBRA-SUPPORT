@@ -17,31 +17,31 @@ const requestColumns: TableColumn<AccessRequestRead>[] = [
   },
   {
     key: 'status',
-    header: 'Status',
+    header: 'Estado',
     render: (row) => <RequestStatusBadge status={row.status} />,
   },
   {
     key: 'requested_by',
-    header: 'Requested By',
+    header: 'Solicitado por',
     render: (row) => row.requested_by.full_name,
   },
   {
     key: 'access_type',
-    header: 'Type',
+    header: 'Tipo',
     render: (row) => (
       <span className="text-xs font-medium uppercase tracking-wide">
-        {row.access_type === 'TEMPORARY' ? 'Temp' : 'Perm'}
+        {row.access_type === 'TEMPORARY' ? 'Temporal' : 'Permanente'}
       </span>
     ),
   },
   {
     key: 'created_at',
-    header: 'Created',
+    header: 'Creado',
     render: (row) => formatDate(row.created_at),
   },
   {
     key: 'expires_at',
-    header: 'Expires',
+    header: 'Expira',
     render: (row) => (row.expires_at ? formatDate(row.expires_at) : '—'),
   },
 ];

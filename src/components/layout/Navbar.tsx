@@ -4,15 +4,21 @@ import { useAuthStore } from '../../features/auth/store/authStore';
 import logoMiFibra from '../../assets/images/logo-mifibra.png';
 
 const userNavItems = [
-  { to: '/dashboard', label: 'My Requests' },
+  { to: '/dashboard', label: 'Mis solicitudes' },
 ];
 
 const adminNavItems = [
-  { to: '/admin/pending', label: 'Pending' },
-  { to: '/admin/requests', label: 'All Requests' },
-  { to: '/admin/users', label: 'Users' },
+  { to: '/admin/pending', label: 'Pendientes' },
+  { to: '/admin/requests', label: 'Todas las solicitudes' },
+  { to: '/admin/users', label: 'Usuarios' },
   { to: '/admin/firewall', label: 'Firewall' },
 ];
+
+function getRoleLabel(role: string | undefined) {
+  if (role === 'ADMIN') return 'Administrador';
+  if (role === 'USER') return 'Usuario';
+  return role ?? '';
+}
 
 export function Navbar() {
   const { user, logout } = useAuthStore();
@@ -64,7 +70,7 @@ export function Navbar() {
           <div className="flex items-center gap-4">
             <div className="hidden lg:flex flex-col items-end">
               <span className="text-sm font-medium text-text-primary">{user?.name}</span>
-              <span className="text-xs text-text-muted capitalize">{user?.role}</span>
+              <span className="text-xs text-text-muted capitalize">{getRoleLabel(user?.role)}</span>
             </div>
             <div className="h-9 w-9 rounded-full bg-gradient-brand flex items-center justify-center text-white font-bold text-sm shadow-glow-orange">
               {user?.name?.charAt(0) || 'U'}
@@ -116,7 +122,7 @@ export function Navbar() {
 
               <div className="mt-2 rounded-2xl border border-border-subtle/60 bg-surface/55 p-4">
                 <p className="text-sm font-semibold text-text-primary">{user?.name}</p>
-                <p className="text-xs capitalize text-text-muted mt-1">{user?.role}</p>
+                <p className="text-xs capitalize text-text-muted mt-1">{getRoleLabel(user?.role)}</p>
                 <button onClick={handleLogout} className="btn-ghost mt-3 w-full justify-center">
                   Cerrar sesión
                 </button>

@@ -34,7 +34,7 @@ export default function RequestDetailPage() {
       const data = await getRequest(Number(requestId));
       setRequest(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Request not found');
+      setError(err instanceof Error ? err.message : 'Solicitud no encontrada');
     } finally {
       setLoading(false);
     }
@@ -51,12 +51,12 @@ export default function RequestDetailPage() {
     try {
       const updated = await approveRequest(request.id, { review_comment: comment || null });
       setRequest(updated);
-      toast.success(`Request #${request.id} approved`);
+      toast.success(`Solicitud #${request.id} aprobada`);
     } catch (err: unknown) {
       const detail =
         err && typeof err === 'object' && 'response' in err
           ? String((err as { response: { data: { detail: string } } }).response?.data?.detail ?? '')
-          : 'Failed to approve';
+          : 'No se pudo aprobar la solicitud';
       toast.error(detail);
     } finally {
       setActionLoading(false);
@@ -72,12 +72,12 @@ export default function RequestDetailPage() {
         action,
       });
       setRequest(updated);
-      toast.success(`Request #${request.id} rejected`);
+      toast.success(`Solicitud #${request.id} rechazada`);
     } catch (err: unknown) {
       const detail =
         err && typeof err === 'object' && 'response' in err
           ? String((err as { response: { data: { detail: string } } }).response?.data?.detail ?? '')
-          : 'Failed to reject';
+          : 'No se pudo rechazar la solicitud';
       toast.error(detail);
     } finally {
       setActionLoading(false);
@@ -86,7 +86,7 @@ export default function RequestDetailPage() {
 
   if (loading) return <LoadingState />;
   if (error) return <ErrorState message={error} onRetry={fetchRequest} />;
-  if (!request) return <ErrorState message="Request not found" />;
+  if (!request) return <ErrorState message="Solicitud no encontrada" />;
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -96,11 +96,11 @@ export default function RequestDetailPage() {
         </button>
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-text-primary">Request #{request.id}</h1>
+            <h1 className="text-2xl font-bold text-text-primary">Solicitud #{request.id}</h1>
             <RequestStatusBadge status={request.status} />
           </div>
           <p className="text-sm text-text-muted mt-1">
-            Created {new Intl.DateTimeFormat('es-PE', { dateStyle: 'full', timeStyle: 'short' }).format(new Date(request.created_at))}
+            Creada el {new Intl.DateTimeFormat('es-PE', { dateStyle: 'full', timeStyle: 'short' }).format(new Date(request.created_at))}
           </p>
         </div>
       </div>
@@ -111,28 +111,28 @@ export default function RequestDetailPage() {
           <div className="glass-card p-5">
             <h2 className="text-sm font-semibold text-text-primary mb-3 flex items-center gap-2">
               <Monitor size={16} className="text-gs-orange" />
-              Connection Details
+              Detalles de conexion
             </h2>
-            <DetailRow label="Client IP" value={<span className="font-mono">{request.client_ip}</span>} />
+            <DetailRow label="IP del cliente" value={<span className="font-mono">{request.client_ip}</span>} />
             <DetailRow label="Port" value={`${request.port}/${request.protocol}`} />
-            <DetailRow label="Access Type" value={request.access_type} />
+            <DetailRow label="Tipo de acceso" value={request.access_type === 'TEMPORARY' ? 'Temporal' : 'Permanente'} />
             <DetailRow
-              label="Duration"
+              label="Duracion"
               value={
                 request.access_type === 'TEMPORARY'
-                  ? `${request.requested_duration_minutes} minutes`
-                  : 'Permanent'
+                  ? `${request.requested_duration_minutes} minutos`
+                  : 'Permanente'
               }
             />
             {request.starts_at && (
               <DetailRow
-                label="Starts At"
+                label="Empieza el"
                 value={new Intl.DateTimeFormat('es-PE', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(request.starts_at))}
               />
             )}
             {request.expires_at && (
               <DetailRow
-                label="Expires At"
+                label="Expira el"
                 value={
                   <span className={new Date(request.expires_at) < new Date() ? 'text-status-expired' : ''}>
                     {new Intl.DateTimeFormat('es-PE', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(request.expires_at))}
@@ -145,14 +145,14 @@ export default function RequestDetailPage() {
           <div className="glass-card p-5">
             <h2 className="text-sm font-semibold text-text-primary mb-3 flex items-center gap-2">
               <User size={16} className="text-gs-orange" />
-              Requester & Reason
+              Solicitante y motivo
             </h2>
-            <DetailRow label="Requested By" value={request.requested_by.full_name} />
+            <DetailRow label="Solicitado por" value={request.requested_by.full_name} />
             <DetailRow label="Email" value={request.requested_by.email} />
-            {request.client_name && <DetailRow label="Client Name" value={request.client_name} />}
-            {request.client_document && <DetailRow label="Client Document" value={request.client_document} />}
+            {request.client_name && <DetailRow label="Nombre del cliente" value={request.client_name} />}
+            {request.client_document && <DetailRow label="Documento del cliente" value={request.client_document} />}
             <DetailRow
-              label="Reason"
+              label="Motivo"
               value={<span className="text-text-secondary">{request.reason}</span>}
             />
           </div>
@@ -168,12 +168,12 @@ export default function RequestDetailPage() {
 
           {request.reviewed_by && (
             <div className="glass-card p-5">
-              <h2 className="text-sm font-semibold text-text-primary mb-3">Review Info</h2>
-              <DetailRow label="Reviewed By" value={request.reviewed_by.full_name} />
-              {request.review_comment && <DetailRow label="Comment" value={request.review_comment} />}
+              <h2 className="text-sm font-semibold text-text-primary mb-3">Informacion de revision</h2>
+              <DetailRow label="Revisado por" value={request.reviewed_by.full_name} />
+              {request.review_comment && <DetailRow label="Comentario" value={request.review_comment} />}
               {request.reviewed_at && (
                 <DetailRow
-                  label="Reviewed At"
+                  label="Revisado el"
                   value={new Intl.DateTimeFormat('es-PE', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(request.reviewed_at))}
                 />
               )}

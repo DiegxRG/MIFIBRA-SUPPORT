@@ -45,7 +45,7 @@ export function LoginPage() {
               <div className="glass-card p-3.5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-text-muted">Whitelist</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-text-muted">Lista blanca</p>
                     <p className="mt-1.5 text-base font-semibold leading-6 text-text-primary">Autoriza IPs temporales</p>
                   </div>
                   <div className="rounded-xl bg-mf-pink/12 p-2 text-mf-pink-light">
@@ -57,7 +57,7 @@ export function LoginPage() {
               <div className="glass-card p-3.5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-text-muted">Blacklist</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-text-muted">Lista negra</p>
                     <p className="mt-1.5 text-base font-semibold leading-6 text-text-primary">Bloquea accesos de riesgo</p>
                   </div>
                   <div className="rounded-xl bg-status-expired/12 p-2 text-status-expired">
@@ -86,7 +86,7 @@ export function LoginPage() {
               <div className="mb-8 flex items-center justify-between gap-4">
                 <div>
                   <p className="section-label mb-2">Ingreso seguro</p>
-                  <h2 className="text-3xl font-bold text-gradient">GeoShield Whitelist</h2>
+                  <h2 className="text-3xl font-bold text-gradient">GeoShield Accesos</h2>
                 </div>
                 <div className="hidden h-12 w-12 rounded-2xl border border-mf-pink/20 bg-mf-pink/10 text-mf-pink sm:flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>

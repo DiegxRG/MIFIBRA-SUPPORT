@@ -25,7 +25,7 @@ export default function UserDashboardPage() {
       const data = await listRequests();
       setRequests(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to load requests');
+      setError(err instanceof Error ? err.message : 'No se pudieron cargar las solicitudes');
     } finally {
       setLoading(false);
     }
@@ -54,14 +54,14 @@ export default function UserDashboardPage() {
             : null,
       };
       const created = await createRequest(payload);
-      toast.success(`Request #${created.id} created successfully`);
+      toast.success(`Solicitud #${created.id} creada correctamente`);
       setShowCreate(false);
       fetchRequests();
     } catch (err: unknown) {
       const detail =
         err && typeof err === 'object' && 'response' in err
           ? String((err as { response: { data: { detail: string } } }).response?.data?.detail ?? '')
-          : 'Failed to create request';
+          : 'No se pudo crear la solicitud';
       toast.error(detail);
     } finally {
       setSubmitting(false);
@@ -81,12 +81,12 @@ export default function UserDashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-text-primary">My Requests</h1>
-          <p className="text-sm text-text-muted mt-1">Manage your access requests</p>
+          <h1 className="text-2xl font-bold text-text-primary">Mis solicitudes</h1>
+          <p className="text-sm text-text-muted mt-1">Gestiona tus solicitudes de acceso</p>
         </div>
         <button onClick={() => setShowCreate(!showCreate)} className="btn-primary flex items-center gap-2">
           <Plus size={18} />
-          New Request
+          Nueva solicitud
         </button>
       </div>
 
@@ -98,26 +98,26 @@ export default function UserDashboardPage() {
         </div>
         <div className="stat-card">
           <p className="text-2xl font-bold text-status-pending">{counts.pending}</p>
-          <p className="text-xs text-text-muted">Pending</p>
+          <p className="text-xs text-text-muted">Pendientes</p>
         </div>
         <div className="stat-card">
           <p className="text-2xl font-bold text-status-active">{counts.approved}</p>
-          <p className="text-xs text-text-muted">Approved</p>
+          <p className="text-xs text-text-muted">Aprobadas</p>
         </div>
         <div className="stat-card">
           <p className="text-2xl font-bold text-status-expired">{counts.rejected}</p>
-          <p className="text-xs text-text-muted">Rejected</p>
+          <p className="text-xs text-text-muted">Rechazadas</p>
         </div>
         <div className="stat-card">
           <p className="text-2xl font-bold text-status-revoked">{counts.expired}</p>
-          <p className="text-xs text-text-muted">Expired</p>
+          <p className="text-xs text-text-muted">Expiradas</p>
         </div>
       </div>
 
       {/* Create form (toggled) */}
       {showCreate && (
         <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-text-primary mb-4">New Access Request</h2>
+          <h2 className="text-lg font-semibold text-text-primary mb-4">Nueva solicitud de acceso</h2>
           <CreateRequestForm onSubmit={handleCreate} loading={submitting} />
         </div>
       )}
@@ -129,8 +129,8 @@ export default function UserDashboardPage() {
         <ErrorState message={error} onRetry={fetchRequests} />
       ) : requests.length === 0 ? (
         <EmptyState
-          title="No requests yet"
-          description="Create your first access request to get started."
+          title="Todavia no hay solicitudes"
+          description="Crea tu primera solicitud de acceso para comenzar."
         
         />
       ) : (

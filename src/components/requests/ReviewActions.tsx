@@ -27,12 +27,12 @@ export default function ReviewActions({ request, onApprove, onReject, loading }:
 
   return (
     <div className="glass-card p-5 space-y-4">
-      <h3 className="text-sm font-semibold text-text-primary">Review Request</h3>
+      <h3 className="text-sm font-semibold text-text-primary">Revisar solicitud</h3>
 
       <textarea
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        placeholder="Review comment (optional)"
+        placeholder="Comentario de revision (opcional)"
         rows={2}
         className="input-base resize-none"
       />
@@ -42,21 +42,21 @@ export default function ReviewActions({ request, onApprove, onReject, loading }:
           <AlertTriangle size={18} className="text-status-pending shrink-0" />
           <p className="text-xs text-text-secondary flex-1">
             {showConfirm === 'approve'
-              ? 'This will grant access and create a firewall rule.'
-              : 'This will reject the request without adding it to the blacklist.'}
+              ? 'Esto otorgara acceso y creara una regla en el firewall.'
+              : 'Esto rechazara la solicitud sin agregarla a la lista negra.'}
           </p>
           <button
             onClick={handleConfirm}
             disabled={loading}
             className="btn-primary !px-3 !py-1.5 !text-xs"
           >
-            {loading ? <Loader2 className="animate-spin" size={14} /> : 'Confirm'}
+            {loading ? <Loader2 className="animate-spin" size={14} /> : 'Confirmar'}
           </button>
           <button
             onClick={() => setShowConfirm(null)}
             className="btn-ghost !px-3 !py-1.5 !text-xs"
           >
-            Cancel
+            Cancelar
           </button>
         </div>
       )}
@@ -68,7 +68,7 @@ export default function ReviewActions({ request, onApprove, onReject, loading }:
           className="btn-primary flex-1 flex items-center justify-center gap-2"
         >
           <CheckCircle2 size={18} />
-          Approve
+          Aprobar
         </button>
         <button
           onClick={() => setShowConfirm('reject')}
@@ -76,7 +76,7 @@ export default function ReviewActions({ request, onApprove, onReject, loading }:
           className="btn-danger flex-1 flex items-center justify-center gap-2"
         >
           <XCircle size={18} />
-          Reject
+          Rechazar
         </button>
       </div>
     </div>
