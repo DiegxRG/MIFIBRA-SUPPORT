@@ -20,3 +20,7 @@ export const resetUserPassword = async (userId: number): Promise<UserResetPasswo
   const { data } = await api.post<UserResetPasswordResponse>(`/users/${userId}/reset-password`);
   return data;
 };
+
+export const deleteUser = async (userId: number): Promise<void> => {
+  await api.delete(`/users/${userId}`);
+};

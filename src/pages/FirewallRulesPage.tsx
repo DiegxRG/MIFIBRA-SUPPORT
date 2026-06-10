@@ -3,7 +3,8 @@ import { RefreshCw, Link2, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { listFirewallRules, syncFirewallRules } from '@/api/firewall';
 import type { FirewallRuleListItem } from '@/types/api';
-import FirewallRulesTable from '@/components/firewall/FirewallRulesTable';
+import BlacklistRulesTable from '@/components/firewall/BlacklistRulesTable';
+import WhitelistRulesTable from '@/components/firewall/WhitelistRulesTable';
 import EdlLinks from '@/components/firewall/EdlLinks';
 import LoadingState from '@/components/common/LoadingState';
 import ErrorState from '@/components/common/ErrorState';
@@ -48,6 +49,8 @@ export default function FirewallRulesPage() {
 
   const whitelistCount = rules.filter((r) => r.list_type === 'WHITELIST' && r.is_active).length;
   const blacklistCount = rules.filter((r) => r.list_type === 'BLACKLIST' && r.is_active).length;
+  const whitelistRules = rules.filter((r) => r.list_type === 'WHITELIST');
+  const blacklistRules = rules.filter((r) => r.list_type === 'BLACKLIST');
 
   return (
     <div className="space-y-6">
@@ -91,7 +94,6 @@ export default function FirewallRulesPage() {
         <EdlLinks />
       </div>
 
-      {/* Rules table */}
       {loading ? (
         <LoadingState />
       ) : error ? (
@@ -102,7 +104,25 @@ export default function FirewallRulesPage() {
           description="Rules are created automatically when requests are approved."
         />
       ) : (
-        <FirewallRulesTable rules={rules} />
+        <div className="space-y-6">
+          <div className="glass-card p-5">
+            <h2 className="text-sm font-semibold text-text-primary mb-4">Active Blacklist</h2>
+            {blacklistRules.length === 0 ? (
+              <p className="text-sm text-text-muted">No blacklist rules.</p>
+            ) : (
+              <BlacklistRulesTable rules={blacklistRules} />
+            )}
+          </div>
+
+          <div className="glass-card p-5">
+            <h2 className="text-sm font-semibold text-text-primary mb-4">Whitelist</h2>
+            {whitelistRules.length === 0 ? (
+              <p className="text-sm text-text-muted">No whitelist rules.</p>
+            ) : (
+              <WhitelistRulesTable rules={whitelistRules} onChanged={fetchRules} />
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

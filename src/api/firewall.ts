@@ -1,5 +1,5 @@
 import api from '@/lib/axios';
-import type { FirewallRuleListItem, FirewallListType, AccessType } from '@/types/api';
+import type { FirewallRuleListItem, FirewallListType, AccessType, FirewallWhitelistRuleUpdate } from '@/types/api';
 
 export interface FirewallRuleListParams {
   list_type?: FirewallListType;
@@ -17,6 +17,14 @@ export const listFirewallRules = async (
 
 export const disableFirewallRule = async (ruleId: number): Promise<FirewallRuleListItem> => {
   const { data } = await api.post<FirewallRuleListItem>(`/admin/firewall/rules/${ruleId}/disable`);
+  return data;
+};
+
+export const updateWhitelistRule = async (
+  ruleId: number,
+  payload: FirewallWhitelistRuleUpdate
+): Promise<FirewallRuleListItem> => {
+  const { data } = await api.patch<FirewallRuleListItem>(`/admin/firewall/rules/${ruleId}`, payload);
   return data;
 };
 

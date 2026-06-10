@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
-import { listUsers, updateUser, resetUserPassword } from '@/api/users';
+import { deleteUser, listUsers, resetUserPassword } from '@/api/users';
 import type { UserRead } from '@/types/api';
 import type { UserCreateResponse } from '@/types/api';
 import UsersTable from '@/components/users/UsersTable';
@@ -15,6 +15,7 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [editingUser, setEditingUser] = useState<UserRead | null>(null);
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -35,7 +36,7 @@ export default function UsersPage() {
   }, [fetchUsers]);
 
   const handleUserCreated = (result: UserCreateResponse) => {
-    toast.success(`User created. Temp password: ${result.temporary_password}`, { duration: 10_000 });
+    toast.success(`User created: ${result.email}`);
     setShowCreateModal(false);
     fetchUsers();
   };
@@ -49,13 +50,18 @@ export default function UsersPage() {
     }
   };
 
-  const handleToggleActive = async (user: UserRead) => {
+  const handleDeleteUser = async (user: UserRead) => {
+    if (!window.confirm(`Delete user ${user.email}?`)) return;
     try {
-      await updateUser(user.id, { is_active: !user.is_active });
-      toast.success(`${user.full_name} ${user.is_active ? 'deactivated' : 'activated'}`);
+      await deleteUser(user.id);
+      toast.success(`${user.full_name} deleted`);
       fetchUsers();
-    } catch {
-      toast.error('Failed to update user');
+    } catch (err: unknown) {
+      const msg =
+        err && typeof err === 'object' && 'response' in err
+          ? String((err as { response: { data: { detail: string } } }).response?.data?.detail ?? '')
+          : 'Failed to delete user';
+      toast.error(msg);
     }
   };
 
@@ -81,16 +87,9 @@ export default function UsersPage() {
       ) : (
         <UsersTable
           users={users}
-          onRowClick={(user) => {
-            const action = confirm(
-              `${user.full_name}\n\nOK: Toggle active status\nCancel: Reset password`
-            );
-            if (action) {
-              handleToggleActive(user);
-            } else {
-              handleResetPassword(user.id);
-            }
-          }}
+          onEdit={(user) => setEditingUser(user)}
+          onResetPassword={(user) => handleResetPassword(user.id)}
+          onDelete={handleDeleteUser}
         />
       )}
 
@@ -98,6 +97,17 @@ export default function UsersPage() {
         <UserFormModal
           onClose={() => setShowCreateModal(false)}
           onCreated={handleUserCreated}
+        />
+      )}
+
+      {editingUser && (
+        <UserFormModal
+          user={editingUser}
+          onClose={() => setEditingUser(null)}
+          onUpdated={() => {
+            setEditingUser(null);
+            fetchUsers();
+          }}
         />
       )}
     </div>

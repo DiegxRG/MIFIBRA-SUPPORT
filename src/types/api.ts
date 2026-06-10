@@ -55,12 +55,13 @@ export interface MessageResponse {
 export interface UserCreate {
   full_name: string;
   email: string;
+  password: string;
   role?: UserRole;
 }
 
 export interface UserCreateResponse {
   id: number;
-  temporary_password: string;
+  email: string;
 }
 
 export interface UserRead {
@@ -78,6 +79,7 @@ export interface UserRead {
 
 export interface UserUpdate {
   full_name?: string | null;
+  email?: string | null;
   role?: UserRole | null;
   is_active?: boolean | null;
 }
@@ -154,6 +156,11 @@ export interface FirewallRuleListItem {
   metadata_json: Record<string, unknown> | null;
   request_id: number | null;
   created_at: string;
+}
+
+export interface FirewallWhitelistRuleUpdate {
+  expires_at?: string | null;
+  reason?: string | null;
 }
 
 /* ───────── API Error ───────── */
