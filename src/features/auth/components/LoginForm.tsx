@@ -51,7 +51,7 @@ export function LoginForm() {
       }
 
       navigate('/dashboard');
-    } catch (err) {
+    } catch {
       // Error is handled by hook and displayed via UI
     }
   };

@@ -2,11 +2,17 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from '../components/layout/ProtectedRoute';
 import { AppLayout } from '../components/layout/AppLayout';
 import { LoginPage } from '../pages/LoginPage';
-import { DashboardPage } from '../pages/DashboardPage';
-import { WhitelistPage } from '../pages/WhitelistPage';
-import { RouteErrorPage } from '../pages/RouteErrorPage';
-import { BlacklistPage } from '../pages/BlacklistPage';
 import { ChangePasswordPage } from '../pages/ChangePasswordPage';
+import { RouteErrorPage } from '../pages/RouteErrorPage';
+import RoleRoute from '../auth/RoleRoute';
+
+import UserDashboardPage from '../pages/UserDashboardPage';
+import PendingRequestsPage from '../pages/PendingRequestsPage';
+import AllRequestsPage from '../pages/AllRequestsPage';
+import UsersPage from '../pages/UsersPage';
+import FirewallRulesPage from '../pages/FirewallRulesPage';
+import RequestDetailPage from '../pages/RequestDetailPage';
+import RootRedirect from '../auth/RootRedirect';
 
 export const router = createBrowserRouter([
   {
@@ -28,19 +34,51 @@ export const router = createBrowserRouter([
         children: [
           {
             path: '/dashboard',
-            element: <DashboardPage />,
+            element: (
+              <RoleRoute allowedRoles={['USER']}>
+                <UserDashboardPage />
+              </RoleRoute>
+            ),
           },
           {
-            path: '/whitelist',
-            element: <WhitelistPage />,
+            path: '/admin/pending',
+            element: (
+              <RoleRoute allowedRoles={['ADMIN']}>
+                <PendingRequestsPage />
+              </RoleRoute>
+            ),
           },
           {
-            path: '/blacklist',
-            element: <BlacklistPage />,
+            path: '/admin/requests',
+            element: (
+              <RoleRoute allowedRoles={['ADMIN']}>
+                <AllRequestsPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/admin/users',
+            element: (
+              <RoleRoute allowedRoles={['ADMIN']}>
+                <UsersPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/admin/firewall',
+            element: (
+              <RoleRoute allowedRoles={['ADMIN']}>
+                <FirewallRulesPage />
+              </RoleRoute>
+            ),
+          },
+          {
+            path: '/requests/:requestId',
+            element: <RequestDetailPage />,
           },
           {
             path: '/',
-            element: <Navigate to="/dashboard" replace />,
+            element: <RootRedirect />,
           },
         ],
       },
@@ -51,3 +89,4 @@ export const router = createBrowserRouter([
     element: <Navigate to="/dashboard" replace />,
   },
 ]);
+

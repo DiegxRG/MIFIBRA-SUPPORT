@@ -1,0 +1,141 @@
+import { useState, useEffect, useCallback } from 'react';
+import { Plus } from 'lucide-react';
+import { toast } from 'sonner';
+import { listRequests, createRequest } from '@/api/requests';
+import type { AccessRequestRead, AccessRequestCreate } from '@/types/api';
+import RequestsTable from '@/components/requests/RequestsTable';
+import CreateRequestForm, { type CreateRequestFormData } from '@/components/requests/CreateRequestForm';
+import LoadingState from '@/components/common/LoadingState';
+import ErrorState from '@/components/common/ErrorState';
+import EmptyState from '@/components/common/EmptyState';
+import { useNavigate } from 'react-router-dom';
+
+export default function UserDashboardPage() {
+  const navigate = useNavigate();
+  const [requests, setRequests] = useState<AccessRequestRead[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const fetchRequests = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await listRequests();
+      setRequests(data);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to load requests');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchRequests();
+  }, [fetchRequests]);
+
+  const handleCreate = async (raw: Record<string, unknown>) => {
+    setSubmitting(true);
+    try {
+      const data = raw as unknown as CreateRequestFormData;
+      const payload: AccessRequestCreate = {
+        client_ip: data.client_ip,
+        port: data.port!,
+        protocol: data.protocol,
+        client_name: data.client_name || null,
+        client_document: data.client_document || null,
+        reason: data.reason,
+        access_type: data.access_type,
+        requested_duration_minutes:
+          data.access_type === 'TEMPORARY' && data.requested_duration_minutes
+            ? Number(data.requested_duration_minutes)
+            : null,
+      };
+      const created = await createRequest(payload);
+      toast.success(`Request #${created.id} created successfully`);
+      setShowCreate(false);
+      fetchRequests();
+    } catch (err: unknown) {
+      const detail =
+        err && typeof err === 'object' && 'response' in err
+          ? String((err as { response: { data: { detail: string } } }).response?.data?.detail ?? '')
+          : 'Failed to create request';
+      toast.error(detail);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const counts = {
+    total: requests.length,
+    pending: requests.filter((r) => r.status === 'PENDING').length,
+    approved: requests.filter((r) => r.status === 'APPROVED').length,
+    rejected: requests.filter((r) => r.status === 'REJECTED').length,
+    expired: requests.filter((r) => r.status === 'EXPIRED').length,
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-text-primary">My Requests</h1>
+          <p className="text-sm text-text-muted mt-1">Manage your access requests</p>
+        </div>
+        <button onClick={() => setShowCreate(!showCreate)} className="btn-primary flex items-center gap-2">
+          <Plus size={18} />
+          New Request
+        </button>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-5 gap-4">
+        <div className="stat-card">
+          <p className="text-2xl font-bold text-text-primary">{counts.total}</p>
+          <p className="text-xs text-text-muted">Total</p>
+        </div>
+        <div className="stat-card">
+          <p className="text-2xl font-bold text-status-pending">{counts.pending}</p>
+          <p className="text-xs text-text-muted">Pending</p>
+        </div>
+        <div className="stat-card">
+          <p className="text-2xl font-bold text-status-active">{counts.approved}</p>
+          <p className="text-xs text-text-muted">Approved</p>
+        </div>
+        <div className="stat-card">
+          <p className="text-2xl font-bold text-status-expired">{counts.rejected}</p>
+          <p className="text-xs text-text-muted">Rejected</p>
+        </div>
+        <div className="stat-card">
+          <p className="text-2xl font-bold text-status-revoked">{counts.expired}</p>
+          <p className="text-xs text-text-muted">Expired</p>
+        </div>
+      </div>
+
+      {/* Create form (toggled) */}
+      {showCreate && (
+        <div className="glass-card p-6">
+          <h2 className="text-lg font-semibold text-text-primary mb-4">New Access Request</h2>
+          <CreateRequestForm onSubmit={handleCreate} loading={submitting} />
+        </div>
+      )}
+
+      {/* Requests table */}
+      {loading ? (
+        <LoadingState />
+      ) : error ? (
+        <ErrorState message={error} onRetry={fetchRequests} />
+      ) : requests.length === 0 ? (
+        <EmptyState
+          title="No requests yet"
+          description="Create your first access request to get started."
+        
+        />
+      ) : (
+        <RequestsTable requests={requests} onRowClick={(r) => navigate(`/requests/${r.id}`)} />
+      )}
+    </div>
+  );
+}
