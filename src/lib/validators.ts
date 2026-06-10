@@ -72,10 +72,7 @@ export const loginSchema = z.object({
   email: z
     .string()
     .min(1, 'El email es obligatorio')
-    .email('Email inválido')
-    .refine((email) => email.endsWith('@mifibra.pe'), {
-      message: 'Solo se permiten cuentas @mifibra.pe',
-    }),
+    .email('Email inválido'),
   password: z
     .string()
     .min(1, 'La contraseña es obligatoria')
