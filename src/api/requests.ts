@@ -3,6 +3,7 @@ import type {
   AccessRequestCreate,
   AccessRequestRead,
   AccessRequestReview,
+  IpCheckResponse,
 } from '@/types/api';
 
 export interface RequestListParams {
@@ -10,6 +11,11 @@ export interface RequestListParams {
   date?: string;
   email?: string;
 }
+
+export const checkIp = async (ip: string): Promise<IpCheckResponse> => {
+  const { data } = await api.get<IpCheckResponse>('/requests/check-ip', { params: { ip } });
+  return data;
+};
 
 export const createRequest = async (payload: AccessRequestCreate): Promise<AccessRequestRead> => {
   const { data } = await api.post<AccessRequestRead>('/requests', payload);

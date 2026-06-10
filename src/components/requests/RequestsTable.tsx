@@ -11,11 +11,6 @@ const requestColumns: TableColumn<AccessRequestRead>[] = [
     render: (row) => <span className="font-mono text-sm">{row.client_ip}</span>,
   },
   {
-    key: 'port',
-    header: 'Port',
-    render: (row) => `${row.port}/${row.protocol}`,
-  },
-  {
     key: 'status',
     header: 'Estado',
     render: (row) => <RequestStatusBadge status={row.status} />,
@@ -33,6 +28,11 @@ const requestColumns: TableColumn<AccessRequestRead>[] = [
         {row.access_type === 'TEMPORARY' ? 'Temporal' : 'Permanente'}
       </span>
     ),
+  },
+  {
+    key: 'ticket_support',
+    header: 'Ticket',
+    render: (row) => row.ticket_support || '—',
   },
   {
     key: 'created_at',

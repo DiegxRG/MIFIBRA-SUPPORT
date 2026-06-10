@@ -32,37 +32,35 @@ export default function UserDashboardPage() {
   }, []);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchRequests();
   }, [fetchRequests]);
 
-  const handleCreate = async (raw: Record<string, unknown>) => {
+  const handleCreate = async (data: CreateRequestFormData) => {
     setSubmitting(true);
     try {
-      const data = raw as unknown as CreateRequestFormData;
       const payload: AccessRequestCreate = {
         client_ip: data.client_ip,
-        port: data.port!,
-        protocol: data.protocol,
         client_name: data.client_name || null,
-        client_document: data.client_document || null,
+        ticket_support: data.ticket_support || null,
         reason: data.reason,
         access_type: data.access_type,
         requested_duration_minutes:
-          data.access_type === 'TEMPORARY' && data.requested_duration_minutes
-            ? Number(data.requested_duration_minutes)
-            : null,
+          data.access_type === 'PERMANENT'
+            ? null
+            : data.requested_duration_minutes
+              ? Number(data.requested_duration_minutes)
+              : null,
       };
-      const created = await createRequest(payload);
-      toast.success(`Solicitud #${created.id} creada correctamente`);
+      await createRequest(payload);
+      toast.success('Solicitud enviada correctamente. Estado inicial: PENDIENTE DE REVISIÓN NOC.');
       setShowCreate(false);
       fetchRequests();
     } catch (err: unknown) {
       const detail =
         err && typeof err === 'object' && 'response' in err
           ? String((err as { response: { data: { detail: string } } }).response?.data?.detail ?? '')
-          : 'No se pudo crear la solicitud';
-      toast.error(detail);
+          : '';
+      toast.error(detail || 'No se pudo crear la solicitud');
     } finally {
       setSubmitting(false);
     }
@@ -131,7 +129,6 @@ export default function UserDashboardPage() {
         <EmptyState
           title="Todavia no hay solicitudes"
           description="Crea tu primera solicitud de acceso para comenzar."
-        
         />
       ) : (
         <RequestsTable requests={requests} onRowClick={(r) => navigate(`/requests/${r.id}`)} />

@@ -100,10 +100,8 @@ export interface UserSummary {
 
 export interface AccessRequestCreate {
   client_ip: string;
-  port: number;
-  protocol: ProtocolType;
   client_name?: string | null;
-  client_document?: string | null;
+  ticket_support?: string | null;
   reason: string;
   access_type: AccessType;
   requested_duration_minutes?: number | null;
@@ -113,10 +111,8 @@ export interface AccessRequestRead {
   id: number;
   client_ip: string;
   normalized_ip: string;
-  port: number;
-  protocol: ProtocolType;
   client_name: string | null;
-  client_document: string | null;
+  ticket_support: string | null;
   reason: string;
   access_type: AccessType;
   requested_duration_minutes: number | null;
@@ -161,6 +157,15 @@ export interface FirewallRuleListItem {
 export interface FirewallWhitelistRuleUpdate {
   expires_at?: string | null;
   reason?: string | null;
+}
+
+/* ───────── IP Check ───────── */
+
+export interface IpCheckResponse {
+  available: boolean;
+  has_pending_request: boolean;
+  has_active_whitelist: boolean;
+  message: string | null;
 }
 
 /* ───────── API Error ───────── */

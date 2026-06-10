@@ -114,7 +114,6 @@ export default function RequestDetailPage() {
               Detalles de conexion
             </h2>
             <DetailRow label="IP del cliente" value={<span className="font-mono">{request.client_ip}</span>} />
-            <DetailRow label="Port" value={`${request.port}/${request.protocol}`} />
             <DetailRow label="Tipo de acceso" value={request.access_type === 'TEMPORARY' ? 'Temporal' : 'Permanente'} />
             <DetailRow
               label="Duracion"
@@ -150,7 +149,7 @@ export default function RequestDetailPage() {
             <DetailRow label="Solicitado por" value={request.requested_by.full_name} />
             <DetailRow label="Email" value={request.requested_by.email} />
             {request.client_name && <DetailRow label="Nombre del cliente" value={request.client_name} />}
-            {request.client_document && <DetailRow label="Documento del cliente" value={request.client_document} />}
+            {request.ticket_support && <DetailRow label="Ticket de soporte" value={request.ticket_support} />}
             <DetailRow
               label="Motivo"
               value={<span className="text-text-secondary">{request.reason}</span>}
