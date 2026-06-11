@@ -90,9 +90,15 @@ function EditWhitelistModal({
 interface Props {
   rules: FirewallRuleListItem[];
   onChanged: () => void;
+  page?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+  pageSize?: number;
+  onPageSizeChange?: (size: number) => void;
+  totalItems?: number;
 }
 
-export default function WhitelistRulesTable({ rules, onChanged }: Props) {
+export default function WhitelistRulesTable({ rules, onChanged, page, totalPages, onPageChange, pageSize, onPageSizeChange, totalItems }: Props) {
   const [editingRule, setEditingRule] = useState<FirewallRuleListItem | null>(null);
   const [disablingId, setDisablingId] = useState<number | null>(null);
 
@@ -166,7 +172,17 @@ export default function WhitelistRulesTable({ rules, onChanged }: Props) {
 
   return (
     <>
-      <DataTable columns={columns} data={rules} keyExtractor={(r) => r.id} />
+      <DataTable
+        columns={columns}
+        data={rules}
+        keyExtractor={(r) => r.id}
+        page={page}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+        pageSize={pageSize}
+        onPageSizeChange={onPageSizeChange}
+        totalItems={totalItems}
+      />
       {editingRule && (
         <EditWhitelistModal
           rule={editingRule}

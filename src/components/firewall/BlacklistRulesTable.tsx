@@ -39,8 +39,34 @@ const columns: TableColumn<FirewallRuleListItem>[] = [
 
 interface Props {
   rules: FirewallRuleListItem[];
+  page?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+  pageSize?: number;
+  onPageSizeChange?: (size: number) => void;
+  totalItems?: number;
 }
 
-export default function BlacklistRulesTable({ rules }: Props) {
-  return <DataTable columns={columns} data={rules} keyExtractor={(r) => r.id} />;
+export default function BlacklistRulesTable({
+  rules,
+  page,
+  totalPages,
+  onPageChange,
+  pageSize,
+  onPageSizeChange,
+  totalItems,
+}: Props) {
+  return (
+    <DataTable
+      columns={columns}
+      data={rules}
+      keyExtractor={(r) => r.id}
+      page={page}
+      totalPages={totalPages}
+      onPageChange={onPageChange}
+      pageSize={pageSize}
+      onPageSizeChange={onPageSizeChange}
+      totalItems={totalItems}
+    />
+  );
 }

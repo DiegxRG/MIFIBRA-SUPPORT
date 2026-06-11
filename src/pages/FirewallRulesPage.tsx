@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { RefreshCw, Link2, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { listFirewallRules, syncFirewallRules } from '@/api/firewall';
@@ -10,11 +10,17 @@ import LoadingState from '@/components/common/LoadingState';
 import ErrorState from '@/components/common/ErrorState';
 import EmptyState from '@/components/common/EmptyState';
 
+const PAGE_SIZE = 25;
+
 export default function FirewallRulesPage() {
   const [rules, setRules] = useState<FirewallRuleListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [syncing, setSyncing] = useState(false);
+  const [blPage, setBlPage] = useState(1);
+  const [wlPage, setWlPage] = useState(1);
+  const [blPageSize, setBlPageSize] = useState(PAGE_SIZE);
+  const [wlPageSize, setWlPageSize] = useState(PAGE_SIZE);
 
   const fetchRules = useCallback(async () => {
     setLoading(true);
@@ -49,8 +55,23 @@ export default function FirewallRulesPage() {
 
   const whitelistCount = rules.filter((r) => r.list_type === 'WHITELIST' && r.is_active).length;
   const blacklistCount = rules.filter((r) => r.list_type === 'BLACKLIST' && r.is_active).length;
-  const whitelistRules = rules.filter((r) => r.list_type === 'WHITELIST');
-  const blacklistRules = rules.filter((r) => r.list_type === 'BLACKLIST');
+  const allWhitelist = useMemo(() => rules.filter((r) => r.list_type === 'WHITELIST'), [rules]);
+  const allBlacklist = useMemo(() => rules.filter((r) => r.list_type === 'BLACKLIST'), [rules]);
+
+  const blTotalPages = Math.max(1, Math.ceil(allBlacklist.length / blPageSize));
+  const wlTotalPages = Math.max(1, Math.ceil(allWhitelist.length / wlPageSize));
+
+  const safeBlPage = Math.min(blPage, blTotalPages);
+  const safeWlPage = Math.min(wlPage, wlTotalPages);
+
+  const blacklistRules = useMemo(
+    () => allBlacklist.slice((safeBlPage - 1) * blPageSize, safeBlPage * blPageSize),
+    [allBlacklist, safeBlPage, blPageSize],
+  );
+  const whitelistRules = useMemo(
+    () => allWhitelist.slice((safeWlPage - 1) * wlPageSize, safeWlPage * wlPageSize),
+    [allWhitelist, safeWlPage, wlPageSize],
+  );
 
   return (
     <div className="space-y-6">
@@ -110,7 +131,15 @@ export default function FirewallRulesPage() {
             {blacklistRules.length === 0 ? (
               <p className="text-sm text-text-muted">No hay reglas en la lista negra.</p>
             ) : (
-              <BlacklistRulesTable rules={blacklistRules} />
+              <BlacklistRulesTable
+                rules={blacklistRules}
+                page={safeBlPage}
+                totalPages={blTotalPages}
+                onPageChange={setBlPage}
+                pageSize={blPageSize}
+                onPageSizeChange={(s) => { setBlPageSize(s); setBlPage(1); }}
+                totalItems={allBlacklist.length}
+              />
             )}
           </div>
 
@@ -119,7 +148,16 @@ export default function FirewallRulesPage() {
             {whitelistRules.length === 0 ? (
               <p className="text-sm text-text-muted">No hay reglas en la lista blanca.</p>
             ) : (
-              <WhitelistRulesTable rules={whitelistRules} onChanged={fetchRules} />
+              <WhitelistRulesTable
+                rules={whitelistRules}
+                onChanged={fetchRules}
+                page={safeWlPage}
+                totalPages={wlTotalPages}
+                onPageChange={setWlPage}
+                pageSize={wlPageSize}
+                onPageSizeChange={(s) => { setWlPageSize(s); setWlPage(1); }}
+                totalItems={allWhitelist.length}
+              />
             )}
           </div>
         </div>
